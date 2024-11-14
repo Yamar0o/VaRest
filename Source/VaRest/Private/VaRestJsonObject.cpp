@@ -284,6 +284,16 @@ void UVaRestJsonObject::SetStringField(const FString& FieldName, const FString& 
 	JsonObj->SetStringField(FieldName, StringValue);
 }
 
+FName UVaRestJsonObject::GetNameField(const FString& FieldName) const
+{
+	return FName(*GetStringField(FieldName));
+}
+
+FText UVaRestJsonObject::GetTextField(const FString& FieldName) const
+{
+	return FText::FromString(GetStringField(FieldName));
+}
+
 bool UVaRestJsonObject::GetBoolField(const FString& FieldName) const
 {
 	if (!JsonObj->HasTypedField<EJson::Boolean>(FieldName))
@@ -544,6 +554,54 @@ void UVaRestJsonObject::SetStringArrayField(const FString& FieldName, const TArr
 	}
 
 	JsonObj->SetArrayField(FieldName, EntriesArray);
+}
+
+TArray<FName> UVaRestJsonObject::GetNameArrayField(const FString& FieldName) const
+{
+	TArray<FName> NameArray;
+	if (!JsonObj->HasTypedField<EJson::Array>(FieldName) || FieldName.IsEmpty())
+	{
+		UE_LOG(LogVaRest, Warning, TEXT("%s: No field with name %s of type Array"), *VA_FUNC_LINE, *FieldName);
+		return NameArray;
+	}
+
+	const TArray<TSharedPtr<FJsonValue>> JsonArrayValues = JsonObj->GetArrayField(FieldName);
+	for (TArray<TSharedPtr<FJsonValue>>::TConstIterator It(JsonArrayValues); It; ++It)
+	{
+		const auto Value = (*It).Get();
+		if (Value->Type != EJson::String)
+		{
+			UE_LOG(LogVaRest, Error, TEXT("Not String element in array with field name %s"), *FieldName);
+		}
+
+		NameArray.Add(FName(*((*It)->AsString())));
+	}
+
+	return NameArray;
+}
+
+TArray<FText> UVaRestJsonObject::GetTextArrayField(const FString& FieldName) const
+{
+	TArray<FText> TextArray;
+	if (!JsonObj->HasTypedField<EJson::Array>(FieldName) || FieldName.IsEmpty())
+	{
+		UE_LOG(LogVaRest, Warning, TEXT("%s: No field with name %s of type Array"), *VA_FUNC_LINE, *FieldName);
+		return TextArray;
+	}
+
+	const TArray<TSharedPtr<FJsonValue>> JsonArrayValues = JsonObj->GetArrayField(FieldName);
+	for (TArray<TSharedPtr<FJsonValue>>::TConstIterator It(JsonArrayValues); It; ++It)
+	{
+		const auto Value = (*It).Get();
+		if (Value->Type != EJson::String)
+		{
+			UE_LOG(LogVaRest, Error, TEXT("Not String element in array with field name %s"), *FieldName);
+		}
+
+		TextArray.Add(FText::FromString((*It)->AsString()));
+	}
+
+	return TextArray;
 }
 
 TArray<bool> UVaRestJsonObject::GetBoolArrayField(const FString& FieldName) const

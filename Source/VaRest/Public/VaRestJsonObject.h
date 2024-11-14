@@ -124,6 +124,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
 	void SetStringField(const FString& FieldName, const FString& StringValue);
 
+	/** Get the field named FieldName as name. */
+	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
+	FName GetNameField(const FString& FieldName) const;
+
+	/** Get the field named FieldName as text. */
+	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
+	FText GetTextField(const FString& FieldName) const;
+
 	/** Get the field named FieldName as a boolean. */
 	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
 	bool GetBoolField(const FString& FieldName) const;
@@ -233,6 +241,14 @@ public:
 	/** Set an ObjectField named FieldName and value of String Array */
 	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
 	void SetStringArrayField(const FString& FieldName, const TArray<FString>& StringArray);
+
+	/** Get the field named FieldName as a Name Array. Use it only if you're sure that array is uniform! */
+	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
+	TArray<FName> GetNameArrayField(const FString& FieldName) const;
+
+	/** Get the field named FieldName as a Text Array. Use it only if you're sure that array is uniform! */
+	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
+	TArray<FText> GetTextArrayField(const FString& FieldName) const;
 
 	/** Get the field named FieldName as a Bool Array. Use it only if you're sure that array is uniform! */
 	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
