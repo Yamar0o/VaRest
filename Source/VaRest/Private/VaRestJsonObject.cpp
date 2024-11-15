@@ -291,7 +291,7 @@ FName UVaRestJsonObject::GetNameField(const FString& FieldName) const
 
 FText UVaRestJsonObject::GetTextField(const FString& FieldName) const
 {
-	return FText::FromString(GetStringField(FieldName));
+	return FText::AsCultureInvariant(GetStringField(FieldName));
 }
 
 bool UVaRestJsonObject::GetBoolField(const FString& FieldName) const
@@ -598,7 +598,7 @@ TArray<FText> UVaRestJsonObject::GetTextArrayField(const FString& FieldName) con
 			UE_LOG(LogVaRest, Error, TEXT("Not String element in array with field name %s"), *FieldName);
 		}
 
-		TextArray.Add(FText::FromString((*It)->AsString()));
+		TextArray.Add(FText::AsCultureInvariant((*It)->AsString()));
 	}
 
 	return TextArray;
