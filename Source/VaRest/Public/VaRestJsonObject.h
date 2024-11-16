@@ -132,6 +132,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
 	FText GetTextField(const FString& FieldName) const;
 
+	/** Get the field named FieldName as guid. */
+	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
+	FGuid GetGuidField(const FString& FieldName) const;
+
 	/** Get the field named FieldName as a boolean. */
 	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
 	bool GetBoolField(const FString& FieldName) const;
@@ -249,6 +253,10 @@ public:
 	/** Get the field named FieldName as a Text Array. Use it only if you're sure that array is uniform! */
 	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
 	TArray<FText> GetTextArrayField(const FString& FieldName) const;
+
+	/** Get the field named FieldName as a Guid Array. Use it only if you're sure that array is uniform! */
+	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
+	TArray<FGuid> GetGuidArrayField(const FString& FieldName) const;
 
 	/** Get the field named FieldName as a Bool Array. Use it only if you're sure that array is uniform! */
 	UFUNCTION(BlueprintCallable, Category = "VaRest|Json")
