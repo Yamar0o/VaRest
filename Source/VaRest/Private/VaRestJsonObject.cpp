@@ -294,6 +294,23 @@ FText UVaRestJsonObject::GetTextField(const FString& FieldName) const
 	return FText::AsCultureInvariant(GetStringField(FieldName));
 }
 
+FGuid UVaRestJsonObject::GetGuidField(const FString& FieldName) const
+{
+	FGuid OutGuid;
+	if (!JsonObj->HasTypedField<EJson::String>(FieldName))
+	{
+		UE_LOG(LogVaRest, Warning, TEXT("No field with name %s of type String"), *FieldName);
+		OutGuid.Invalidate();
+	}
+	else if (!FGuid::Parse(JsonObj->GetStringField(FieldName), OutGuid))
+	{
+		UE_LOG(LogVaRest, Error, TEXT("Error parsing String element to Guid with field name %s"), *FieldName);
+		OutGuid.Invalidate();
+	}
+
+	return OutGuid;
+}
+
 bool UVaRestJsonObject::GetBoolField(const FString& FieldName) const
 {
 	if (!JsonObj->HasTypedField<EJson::Boolean>(FieldName))
@@ -602,6 +619,37 @@ TArray<FText> UVaRestJsonObject::GetTextArrayField(const FString& FieldName) con
 	}
 
 	return TextArray;
+}
+
+TArray<FGuid> UVaRestJsonObject::GetGuidArrayField(const FString& FieldName) const
+{
+	TArray<FGuid> GuidArray;
+	if (!JsonObj->HasTypedField<EJson::Array>(FieldName) || FieldName.IsEmpty())
+	{
+		UE_LOG(LogVaRest, Warning, TEXT("%s: No field with name %s of type Array"), *VA_FUNC_LINE, *FieldName);
+		return GuidArray;
+	}
+
+	const TArray<TSharedPtr<FJsonValue>> JsonArrayValues = JsonObj->GetArrayField(FieldName);
+	for (TArray<TSharedPtr<FJsonValue>>::TConstIterator It(JsonArrayValues); It; ++It)
+	{
+		const auto Value = (*It).Get();
+		if (Value->Type != EJson::String)
+		{
+			UE_LOG(LogVaRest, Error, TEXT("Not String element in array with field name %s"), *FieldName);
+		}
+
+		FGuid OutGuid;
+		if (!FGuid::Parse((*It)->AsString(), OutGuid))
+		{
+			UE_LOG(LogVaRest, Error, TEXT("Error parsing String element to Guid in array with field name %s"), *FieldName);
+			OutGuid.Invalidate();
+		}
+
+		GuidArray.Add(OutGuid);
+	}
+
+	return GuidArray;
 }
 
 TArray<bool> UVaRestJsonObject::GetBoolArrayField(const FString& FieldName) const
