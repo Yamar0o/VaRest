@@ -5,7 +5,7 @@
 
 # VaRest
 
-VaRest is the plugin for [Unreal Engine 4](https://www.unrealengine.com/) that makes REST server communications easier to use.
+VaRest is the plugin for [Unreal Engine 5](https://www.unrealengine.com/) that makes REST server communications easier to use.
 
 Key features:
 
@@ -16,8 +16,6 @@ Key features:
 * Both bindable events and **latent functions** are provided to control the asynchronous requests
 
 Check the [Wiki](http://bit.ly/VaRest-Docs) for plugin usage examples and installation notes.
-
-Current version: **1.1 R 33** (UE 5.2)
 
 ![SCREENSHOT](SCREENSHOT.jpg)
 
